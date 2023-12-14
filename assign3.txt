@@ -1,49 +1,88 @@
-def add_matrices(matrix1, matrix2):
-    result = [[0 for _ in range(len(matrix1[0]))] for _ in range(len(matrix1))]
-    for i in range(len(matrix1)):
-        for j in range(len(matrix1[0])):
-            result[i][j] = matrix1[i][j] + matrix2[i][j]
-    return result
+def initmat():
+	row=int(input("Input no. of rows:"))
+	col=int(input("Input no. of column:"))
+	mat=[]
+	for i in range(0,row):
+		temp=[]
+		for j in range(0,col):
+			tempnum=int(input("Enter number:"))
+			temp.append(tempnum)
+		mat.append(temp)
+	return mat
+def add(mat1,mat2):
+	if len(mat1)==len(mat2) and len(mat1[0])==len(mat2[0]):
+		result=[]
+		for i in range(0,len(mat1)):
+			temp=[]
+			for j in range(0,len(mat1[0])):
+				tempvalue=mat1[i][j]+mat2[i][j]
+				temp.append(tempvalue)
+			result.append(temp)
+	return result
+def sub(mat1,mat2):
+	if len(mat1)==len(mat2) and len(mat1[0])==len(mat2[0]):
+		result=[]
+		for i in range(0,len(mat1)):
+			temp=[]
+			for j in range(0,len(mat1[0])):
+				tempvalue=mat1[i][j]-mat2[i][j]
+				temp.append(tempvalue)
+			result.append(temp)
+	return result
+def transpose(mat):
+	result=[]
+	for i in range(0,len(mat[0])):
+		temp=[]
+		for j in range(0,len(mat)):
+			tempvalue=mat[j][i]
+			temp.append(tempvalue)
+		result.append(temp)
+	return result
+def multi(mat1,mat2):
+	result=[]
+	tempvalue=0
+	for i in range(len(mat1)):
+		temp=[]
+		for j in range(len(mat2[0])):
+			tempvalue=0
+			for k in range(0,len(mat2)):
+				tempvalue+=mat1[i][k]*mat2[k][j]
+				temp.append(tempvalue)
+			result.append(temp)
+			print(temp)
+	return result
+def printMat(mat):
+	print()
+	for i in range(len(mat)):
+		for j in range(len(mat[0])):
+			print(mat[i][j],end=' ')
+		print()
+		print()
 
-def subtract_matrices(matrix1, matrix2):
-    result = [[0 for _ in range(len(matrix1[0]))] for _ in range(len(matrix1))]
-    for i in range(len(matrix1)):
-        for j in range(len(matrix1[0])):
-            result[i][j] = matrix1[i][j] - matrix2[i][j]
-    return result
-
-def multiply_matrices(matrix1, matrix2):
-    result = [[0 for _ in range(len(matrix2[0]))] for _ in range(len(matrix1))]
-    for i in range(len(matrix1)):
-        for j in range(len(matrix2[0])):
-            for k in range(len(matrix2)):
-                result[i][j] += matrix1[i][k] * matrix2[k][j]
-    return result
-
-def transpose_matrix(matrix):
-    result = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
-    return result
-
-# Example usage:
-matrix_a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-matrix_b = [[9, 8, 7], [6, 5, 4], [3, 2, 1]]
-
-add_result = add_matrices(matrix_a, matrix_b)
-print("Matrix Addition:")
-for row in add_result:
-    print(row)
-
-subtract_result = subtract_matrices(matrix_a, matrix_b)
-print("\nMatrix Subtraction:")
-for row in subtract_result:
-    print(row)
-
-multiply_result = multiply_matrices(matrix_a, matrix_b)
-print("\nMatrix Multiplication:")
-for row in multiply_result:
-    print(row)
-
-transpose_result = transpose_matrix(matrix_a)
-print("\nTranspose of Matrix A:")
-for row in transpose_result:
-    print(row)
+while True:
+                print("1.add\n2.sub\n3.transpose\n4.multip\n5.End")
+                choice=int(input("Enter choice no.:"))
+                if (choice==1):
+                        mat1=initmat()
+                        mat2=initmat()
+                        result=add(mat1,mat2)
+                        printMat(result)
+                        break
+                if(choice==2):
+                        mat1=initmat()
+                        mat2=initmat()
+                        result=sub(mat1,mat2)
+                        printMat(result)
+                        break
+                if(choice==3):
+                        mat1=initmat()
+                        result=transpose(mat1)
+                        printMat(result)
+                        break
+                if(choice==4):
+                        mat1=initmat()
+                        mat2=initmat()
+                        result=multi(mat1,mat2)
+                        printMat(result)
+                if choice==5:
+                        break
