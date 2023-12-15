@@ -1,116 +1,89 @@
-#include<iostream>
-#include<string.h>
-#define max 50
+#include <iostream>
 using namespace std;
+#define size 10
 
-class STACK
+class stackexp
 {
-	private:
-		char a[max];
-		int top;
-	
-	public:
-		STACK()
-		{
-			top=-1;	
-		}	
-		
-		void push(char);
-		void reverse();	
-		void convert(char[]);
-		void palindrome();
+    int top;
+    char stk[size];
+public:
+    stackexp()
+    {
+     top=-1;
+    }
+    void push(char);
+    char pop();
+    int isfull();
+    int isempty();
 };
 
-void STACK::push(char c)
+void stackexp::push(char x)
 {
-	top++;
-	a[top] = c;
-	a[top+1]='\0';
+    top=top+1;
+    stk[top]=x;
 }
 
-void STACK::reverse()
+char stackexp::pop()
 {
-	char str[max];
-	
-	cout<<"\n\nReverse string is : ";
-		
-	for(int i=top,j=0; i>=0; i--,j++)
-	{
-		cout<<a[i];
-		str[j]=a[i];
-	}
-	
-	cout<<endl;
+    char s;
+    s=stk[top];
+    top=top-1;
+    return s;
 }
 
-
-void STACK::convert(char str[])
+int stackexp::isfull()
 {
-	int j,k,len = strlen(str);
-
-	for(j=0, k=0; j<len; j++)
-	{
-		if( ( (int)str[j] >= 97 && (int)str[j] <=122 ) || ( (int)str[j] >= 65 && (int)str[j] <=90 ))
-		{
-			if( (int)str[j] <=90 )
-			{
-				str[k] = (char)( (int)str[j] + 32 );
-			}else
-			{
-				str[k] = str[j];				
-			}
-
-			k++;			
-		}
-	}
-	str[k]='\0';
-
-	cout<<endl<<"Converted String : "<<str<<"\n";
+    if(top==size)
+        return 1;
+    else
+        return 0;
 }
 
-
-
-
-void STACK::palindrome()
-{	
-	char str[max];
-	int i,j;		
-
-	for(i=top,j=0; i>=0; i--,j++)
-	{
-		str[j]=a[i];
-	}
-	str[j]='\0';
-	
-	
-	if(strcmp(str,a) == 0)
-		cout<<"\n\nString is palindrome";
-	else
-		cout<<"\n\nString is not palindrome";
+int stackexp::isempty()
+{
+    if(top==-1)
+        return 1;
+    else
+        return 0;
 }
-
 
 int main()
 {
-	STACK stack;
-
-	char str[max];
-	int i=0;
-	
-	cout<<"\nEnter string to be reversed and check is it palindrome or not : \n\n";
-	
-	cin.getline(str , 50);
-	
-	stack.convert(str);
-	
-	while(str[i] != '\0')
-	{
-		stack.push(str[i]);
-		i++;
-	}
-
-	stack.palindrome();
-
-	stack.reverse();
-	
+    stackexp s1;
+    char exp[20],ch;
+    int i=0;
+    cout << "\n\t!! Parenthesis Checker..!!!!" << endl; // prints !!!Hello World!!!
+    cout<<"\nEnter the expression to check whether it is in well form or not :  ";
+    cin>>exp;
+    if((exp[0]==')')||(exp[0]==']')||(exp[0]=='}'))
+    {
+        cout<<"\n Invalid Expression.....\n";
+        return 0;
+    }
+    else
+    {
+        while(exp[i]!='\0')
+        {
+            ch=exp[i];
+            switch(ch)
+            {
+            case '(':s1.push(ch);break;
+            case '[':s1.push(ch);break;
+            case '{':s1.push(ch);break;
+            case ')':s1.pop();break;
+            case ']':s1.pop();break;
+            case '}':s1.pop();break;
+            }
+            i=i+1;
+        }
+    }
+    if(s1.isempty())
+    {
+        cout<<"\nExpression is well parenthesised...\n";
+    }
+    else
+    {
+        cout<<"\nSorry !!! Invalid Expression or not in well parenthesized....\n";
+    }
+    return 0;
 }
