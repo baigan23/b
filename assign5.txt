@@ -1,44 +1,61 @@
-def selection_sort(arr):
-	for i in range(len(arr)):
-		mindex=i
-		for j in range(i+1 , len(arr)):
-			if(arr[j]<arr[mindex]) :
-				mindex=j
-		
-		temp=arr[i]
-		arr[i]=arr[mindex]
-		arr[mindex]=temp
-	
-	return arr
-	
-A=[]
-n=int(input("Enter no of students in array : "))
-print("Enter students percentage")
-for i in range(n):
-	x=float(input())
-	A.append(x)
+def bubble_sort(lst):
+    N = len(lst)
+    for k in range(N-1):
+        j = 0
+        while j < N-k-1:
+            if lst[j] > lst[j+1]:
+                lst[j], lst[j+1] = lst[j+1], lst[j]
+            j += 1
+    return lst
 
-bucket=[]
-Nb=10
-bucket=[[]for i in range(Nb) ]
-print("\n")
+def selection_sort(lst):
+    N = len(lst)
+    for i in range(N-1):
+        pos = i
+        for j in range(i+1, N):
+            if lst[j] < lst[pos]:
+                pos = j
+        lst[i], lst[pos] = lst[pos], lst[i]
+    return lst
 
+def accept():
+    print("Enter the number of students")
+    no_of_stds = int(input())
+    print("Enter marks [Enter after each mark entered]")
+    lst = []
+    for i in range(no_of_stds):
+        temp = float(input())
+        lst.append(temp)
+    return lst
 
-for i in A:
-	Bnum=int(i/Nb)
-	bucket[Bnum].append(i)
+def top_five(lst):
+    print("Display top five marks? [y/n]")
+    temp = input()
+    if temp == 'y':
+        print("Top five students marks:")
+        for i in range(-1, -6, -1):
+            print(lst[i])
+        print("*****************************************************")
 
-
-sorteddata=[]
-for i in range(Nb):
-	bucket[i]=selection_sort(bucket[i])
-	sorteddata= sorteddata+bucket[i]
- 
- 
-print("Sorted array is :-  \n")
-print(sorteddata)
-print("\n")
-
-print("Top five percentage:-")
-for i in range(5):
-	print(sorteddata[len(sorteddata)-i-1])
+lst = []
+while True:
+    print('* * * * * * * MENU * * * * * * *')
+    print('1. Enter students marks')
+    print('2. Bubble sort')
+    print('3. Selection sort')
+    print('4. Exit')
+    print("Enter your choice [1 to 4]")
+    choice = int(input())
+    
+    if choice == 1:
+        lst = accept()
+    elif choice == 2:
+        bubble_sort(lst)
+        print(lst)
+        top_five(lst)
+    elif choice == 3:
+        selection_sort(lst)
+        print(lst)
+        top_five(lst)
+    elif choice == 4:
+        exit(0)
