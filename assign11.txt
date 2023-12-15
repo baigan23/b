@@ -1,215 +1,150 @@
-#include <iostream>
-#include <string.h>
+#include<iostream>
 using namespace std;
-
-class SLL;
-class node
+const int MAX=5;
+class Job
 {
-    int div;
-    int prn;
-    char name[20];
-    node *next;
-
-    friend SLL;
-
+	int id;
+	int priority;
+	friend class Queue;
 public:
-    node()
-    {
-        next = NULL;
-        div = prn = 0;
-    }
-    node(int d, int p, char Name[])
-    {
-        div = d;
-        prn = p;
-        next = NULL;
-        strcpy(name, Name);
-    }
+	void getdata()
+	{
+		cout<<"\nENter Job id: ";
+		cin>>id;
+		cout<<"\nENter Job priority: ";
+		cin>>priority;
+	}
+	void putdata()
+	{
+		cout<<"\n\t"<<id;
+		cout<<"\t\t"<<priority;
+	}
 };
 
-class SLL
+class Queue
 {
+	int front,rear;
+	Job queue[MAX];
 public:
-    node *head;
-    node *insert;
-    node *end;
-
-    void create();
-    void print();
-    void insertMember();
-    void deleteMember();
-    void count();
-    void mergeList();
-    void recursionPrint(node *temp);
-
-    SLL()
-    {
-        head = NULL;
-        insert = NULL;
-        end = NULL;
-    }
-} list1;
-
-void SLL::create()
+	Queue()
 {
-    int n, d, p;
-    char Name[20];
+		front=rear=-1;
+}
+	bool isEmpty();
+	bool isFull();
+	void insert();
+	void remove();
+	void display();
 
-    cout << "Enter the number of students: ";
-    cin >> n;
-
-    cout << "\nEnter the name, division and PRN of President: \n";
-    cin >> Name >> d >> p;
-
-    head = new node(d, p, Name);
-    end = head;
-
-    for (int i = 1; i < n - 1; i++)
-    {
-        cout << "\nEnter the name, division and PRN of members: \n";
-        cin >> Name >> d >> p;
-        end->next = new node(d, p, Name);
-        end = end->next;
-    }
-    insert = end;
-
-    cout << "\nEnter the name, division and PRN of SECRETARY: \n";
-    cin >> Name >> d >> p;
-    end->next = new node(d, p, Name);
-    end = end->next;
-    end->next = NULL;
+};
+bool Queue::isEmpty()
+{
+	if(front==(rear+1)||rear==-1)
+		return 1;
+	else return 0;
 }
 
-void SLL::insertMember()
+bool Queue::isFull()
 {
-    int d, p;
-    char Name[20];
-    cout << "\nEnter the name, division and PRN of member to INSERT: \n";
-    cin >> Name >> d >> p;
-    insert->next = new node(d, p, Name);
-    insert = insert->next;
-    insert->next = end;
+	if(rear==MAX-1)
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
+void Queue::insert()
+{
+	Job j;
+
+	if(isFull())
+	{
+		cout<<"\nQueue is Full.";
+	}
+	else
+	{
+		j.getdata();
+		if(rear==-1)//empty
+		{
+			front++;
+			rear++;
+
+			queue[rear]=j;
+		}
+		else
+		{
+
+			int i=rear;
+			while(i>=front && queue[i].priority>j.priority)
+			{
+				queue[i+1]=queue[i];
+				i--;
+			}
+			queue[i+1]=j;
+			rear++;
+		}
+		cout<<"\nJob Added To Queue.";
+	}
 }
 
-void SLL::deleteMember()
+void Queue::remove()
 {
-    int searchPRN;
-    node *remove;
-    cout << "Enter the PRN of member to delete: ";
-    cin >> searchPRN;
-    if (searchPRN == head->prn)
-    {
-        remove = head;
-        head = head->next;
-        delete remove;
-    }
-    else
-    {
-        for (node *temp = head; temp != insert; temp = temp->next)
-        {
-            if (temp->next->prn == searchPRN)
-            {
-                if (temp->next == insert)
-                    insert = temp;
-                remove = temp->next;
-                temp->next = temp->next->next;
-                delete remove;
-
-                if (temp == insert)
-                    break;
-            }
-        }
-    }
-    if (searchPRN == end->prn)
-    {
-        remove = end;
-        insert->next = NULL;
-        end = insert;
-        delete remove;
-    }
+	if(rear==-1||front==(rear+1))
+	{
+		cout<<"\nQueue is Empty.";
+	}
+	else
+	{
+		front++;
+		cout<<"\nJob Processed From Queue.";
+	}
 }
-
-void SLL::count()
+void Queue::display()
 {
-    int count = 0;
-    for (node *temp = head; temp != NULL; temp = temp->next)
-        count++;
-    cout << "\nTotal no. of students : " << count;
-}
-
-void SLL::print()
-{
-    cout << "\n\nNAME\tDIV\tPRN\n";
-    for (node *temp = head; temp != NULL; temp = temp->next)
-        cout << temp->name << "\t" << temp->div << "\t" << temp->prn << "\n";
-    cout << "\nPresident is: " << head->name;
-    cout << "\nSecretary is: " << end->name << "\n";
-}
-
-void SLL::mergeList()
-{
-    SLL list2;
-    cout << "\nEnter the contents for second list: \n";
-    list2.create();
-    list1.end->next = list2.head;
-    list1.end = list2.end;
-}
-
-void SLL::recursionPrint(node *temp)
-{
-    if (temp == NULL)
-        return;
-    else
-        recursionPrint(temp->next);
-    cout << temp->name << "\t" << temp->div << "\t" << temp->prn << "\n";
+	if(isEmpty())
+	{
+		cout<<"\nQueue is Empty.";
+	}
+	else
+	{
+		for(int i=front;i<=rear;i++)
+		{
+			queue[i].putdata();
+		}
+	}
 }
 
 int main()
 {
-    int choice;
-    do
-    {
-        cout << "\n1. Create List. \n2. Insert Member \n3. Delete Member \n4. Print List \n5. Merge List \n6. Reverse List \n7. Count \n8. Exit";
-        cout << "\n\nEnter your choice: ";
-        cin >> choice;
-        switch (choice)
-        {
-        case 1:
-            list1.create();
-            break;
 
-        case 2:
-            list1.insertMember();
-            break;
+	int ch;
+	Queue q;
 
-        case 3:
-            list1.deleteMember();
-            break;
+	do
+	{
 
-        case 4:
-            list1.print();
-            break;
+		cout<<"\n\n***MENU***\n";
+		cout<<"1.Insert job\n";
+		cout<<"2.Display jobs\n";
+		cout<<"3.Remove job\n";
+		cout<<"4.Exit\n";
 
-        case 5:
-            list1.mergeList();
-            break;
+		cout<<"Choice: ";
+		cin>>ch;
 
-        case 6:
-            cout << "\n\nNAME\tDIV\tPRN\n";
-            list1.recursionPrint(list1.head);
-            break;
+		switch(ch)
+		{
 
-        case 7:
-            list1.count();
-            break;
+		case 1: q.insert();
+		break;
 
-        case 8:
-            return 0;
+		case 2: cout<<"\n\tJob id ";
+		cout<<"\t  Job priority ";
+		q.display();
+		break;
 
-        default:
-            cout << "Invalid Choice !";
-            break;
-        }
-    } while (choice != 0);
-    return 0;
+		case 3: q.remove();
+		}
+	}while(ch!=4);
+	return 0;
 }
